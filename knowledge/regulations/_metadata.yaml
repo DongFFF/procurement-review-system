@@ -1,0 +1,346 @@
+# regulations.yaml
+# 中直高校（中央部门直属高校）政府采购需求审查 —— 法规知识库种子数据
+# 核实状态：source_url 指向已实际抓取并核对过正文/元数据的官方页面。
+# 未能核实到官方原文的条目，doc_number 或 effective_date 留空，并在末尾「准确性说明」中标注。
+
+- title: 中华人民共和国政府采购法
+  doc_number: ""
+  issuing_body: 全国人民代表大会常务委员会
+  effective_date: 2003-01-01
+  category: law
+  level: national
+  source_url: https://www.ccgp.gov.cn/zcfg/gjfg/201310/t20131029_3587339.htm
+  summary: 政府采购基本法律；第五条禁止限制供应商自由进入本地区和本行业市场，第十条确立采购本国货物工程服务原则，第二十二条、第二十八条、第三十五条、第四十一条分别规定供应商条件、禁止化整为零规避公开招标、招标二十日等标期和履约验收，是需求审查的最高位阶依据。
+
+- title: 中华人民共和国政府采购法实施条例
+  doc_number: 国务院令第658号
+  issuing_body: 国务院
+  effective_date: 2015-03-01
+  category: regulation
+  level: national
+  source_url: https://www.ccgp.gov.cn/zcfg/mof/201502/t20150227_5029424.htm
+  summary: 第二十条逐项列举八种「以不合理条件对供应商实行差别待遇或者歧视待遇」情形，是资格条件、技术参数、评分办法合法性审查的核心条款；第三十条、第三十三条、第三十四条、第四十五条、第四十八条分别规定预算公开、投标保证金上限2%、评标方法与量化对应、履约验收、履约保证金上限10%。
+
+- title: 政府采购需求管理办法
+  doc_number: 财库〔2021〕22号
+  issuing_body: 财政部
+  effective_date: 2021-07-01
+  category: rule
+  level: ministry
+  source_url: https://www.gov.cn/gongbao/content/2021/content_5623061.htm
+  summary: 需求审查的主干规章；第六条界定技术/商务要求范围，第九条要求量化指标明确等次，第十一条规定应开展需求调查的四类项目，第十八条限制业绩作为资格条件不超过2个同类合同，第二十一条规范评审因素设定，第二十三至二十四条规定合同文本与履约验收方案，第二十九至三十三条建立一般性审查与重点审查（非歧视性、竞争性、采购政策、履约风险）机制。
+
+- title: 政府采购货物和服务招标投标管理办法
+  doc_number: 财政部令第87号
+  issuing_body: 财政部
+  effective_date: 2017-10-01
+  category: rule
+  level: ministry
+  source_url: https://www.ccgp.gov.cn/zcfg/mofgz/201707/t20170718_8541199.htm
+  summary: 第十一条明确采购需求七项必备内容，第十二条禁止设定最低限价，第十七条禁止将注册资本等规模条件和生产厂家授权作为资格要求或评审因素，第二十条要求以醒目方式标明实质性要求，第三十一条规定核心产品，第五十五条要求价格分货物不低于30%、服务不低于10%并采用低价优先法，资格条件不得作为评审因素。
+
+- title: 政府采购非招标采购方式管理办法
+  doc_number: 财政部令第74号
+  issuing_body: 财政部
+  effective_date: 2014-02-01
+  category: rule
+  level: ministry
+  source_url: https://www.ccgp.gov.cn/zcfg/mofgz/201401/t20140103_4650784.htm
+  summary: 第十条明确规定谈判文件、询价通知书不得要求或者标明供应商名称或者特定货物的品牌，不得含有指向特定供应商的技术、服务等条件；第十一条列明文件必备内容，第十四条限定保证金不超过预算2%，第二十九条、第四十五条分别规定不少于3个工作日的响应期。
+
+- title: 政府采购框架协议采购方式管理暂行办法
+  doc_number: 财政部令第110号
+  issuing_body: 财政部
+  effective_date: 2022-03-01
+  category: rule
+  level: ministry
+  source_url: https://www.ccgp.gov.cn/zcfg/mofgz/202201/t20220127_17561525.htm
+  summary: 规范多频次、小额度采购；第十一至十二条要求开展需求调查（调查对象一般各不少于3个）并列明货物与服务项目应明确的采购需求要素，第十三条要求确定最高限制单价，第二十五至二十七条规定价格优先法/质量优先法与淘汰比例，适用于高校办公耗材、通用设备等小额零星采购的需求审查。
+
+- title: 政府采购促进中小企业发展管理办法
+  doc_number: 财库〔2020〕46号
+  issuing_body: 财政部、工业和信息化部
+  effective_date: ""
+  category: rule
+  level: ministry
+  source_url: https://www.gov.cn/zhengce/zhengceku/2020-12/29/content_5574611.htm
+  summary: 中小企业预留份额与价格评审优惠的基础性文件；规定适宜由中小企业提供的项目应预留份额专门面向中小企业采购，未预留份额项目对小微企业报价给予价格扣除（货物服务6%—10%），并对联合体和分包设定评审优惠。具体施行日期以附件办法原文为准，待人工复核。
+
+- title: 关于进一步加大政府采购支持中小企业力度的通知
+  doc_number: 财库〔2022〕19号
+  issuing_body: 财政部
+  effective_date: 2022-07-01
+  category: notice
+  level: ministry
+  source_url: https://www.ccgp.gov.cn/zcfg/mof/202205/t20220531_17999872.htm
+  summary: 将货物服务项目小微企业价格扣除优惠由6%—10%提高至10%—20%，联合体或分包优惠由2%—3%提高至4%—6%；明确400万元以下工程采购项目适宜由中小企业提供的应当专门面向中小企业采购，超过400万元的工程项目预留份额阶段性提高至40%以上；要求不得收取没有法律法规依据的保证金。
+
+- title: 政府采购进口产品管理办法
+  doc_number: 财库〔2007〕119号
+  issuing_body: 财政部
+  effective_date: 2007-12-27
+  category: rule
+  level: ministry
+  source_url: https://www.mofcom.gov.cn/zcfb/zgdwjjmywg/art/2008/art_c602b2e78bf74e9cafdb0805fb9f2e50.html
+  summary: 确立「采购本国产品为原则、确需采购进口产品实行审核管理」制度；第七条要求获得财政部门核准后方可采购，第十二条要求专家组五人以上单数且必须包括一名法律专家、采购人代表不得作为专家组成员，第十四条规定进口产品应以公开招标为主要方式。高校科研仪器设备采购需求审查的关键依据。
+
+- title: 必须招标的工程项目规定
+  doc_number: 国家发展和改革委员会令第16号
+  issuing_body: 国家发展和改革委员会
+  effective_date: ""
+  category: rule
+  level: ministry
+  source_url: https://www.ccgp.gov.cn/zcfg/bwfile/201806/t20180612_10082983.htm
+  summary: 界定必须招标的工程建设项目范围与规模标准，是判断高校基建、修缮工程应否招标以及采购方式选择的依据。文号与施行日期未能从官方原文页面直接核实，待人工复核（发改法规规〔2018〕843号正文确认其名称存在）。
+
+- title: 必须招标的基础设施和公用事业项目范围规定
+  doc_number: 发改法规规〔2018〕843号
+  issuing_body: 国家发展和改革委员会
+  effective_date: 2018-06-06
+  category: rule
+  level: ministry
+  source_url: https://www.ccgp.gov.cn/zcfg/bwfile/201806/t20180612_10082983.htm
+  summary: 明确不属于《必须招标的工程项目规定》第二条、第三条情形但关系社会公共利益、公众安全的大型基础设施和公用事业项目必须招标的具体范围，用于校舍、能源、通信、水利等校园基建项目的招标判定。
+
+- title: 中央预算单位政府集中采购目录及标准（2020年版）
+  doc_number: 国办发〔2019〕55号
+  issuing_body: 国务院办公厅
+  effective_date: 2020-01-01
+  category: standard
+  level: national
+  source_url: https://www.ccgp.gov.cn/zcfg/gwywj/202001/t20200110_13735497.htm
+  summary: 中央预算单位（含中央高校）采购组织形式与限额的直接依据；分散采购限额标准为货物和服务单项或批量100万元以上、工程120万元以上，货物服务公开招标数额标准为单项200万元以上；目录表注明确所列项目不包括中央高校、科研院所采购的科研仪器设备，该例外对高校需求审查至关重要。
+
+- title: 关于开展政府采购意向公开工作的通知
+  doc_number: 财库〔2020〕10号
+  issuing_body: 财政部
+  effective_date: 2020-03-02
+  category: notice
+  level: ministry
+  source_url: https://www.gov.cn/zhengce/zhengceku/2020-03/11/content_5489882.htm
+  summary: 规定中央预算单位采购意向应当在中国政府采购网中央主网公开，公开内容包括采购项目名称、采购需求概况、预算金额、预计采购时间；原则上不得晚于采购活动开始前30日公开，采购需求概况应包含标的名称、主要功能或目标、数量及质量服务安全时限要求。
+
+- title: 财政部关于促进政府采购公平竞争优化营商环境的通知
+  doc_number: 财库〔2019〕38号
+  issuing_body: 财政部
+  effective_date: ""
+  category: notice
+  level: ministry
+  source_url: https://www.gov.cn/zhengce/zhengceku/2020-03/11/content_5489882.htm
+  summary: 清理政府采购领域妨碍公平竞争的规定和做法，是资格条件与评审因素公平性审查的重要政策依据。文号经财政部官方文件引用确认，正文与施行日期待人工复核。
+
+- title: 财政部关于在政府采购活动中查询及使用信用记录有关问题的通知
+  doc_number: 财库〔2016〕125号
+  issuing_body: 财政部
+  effective_date: 2016-08-01
+  category: notice
+  level: ministry
+  source_url: https://www.ccgp.gov.cn/zcfg/mof/201608/t20160811_7169275.htm
+  summary: 规定信用记录查询渠道为「信用中国」网站和中国政府采购网，采购文件应明确查询渠道、截止时点、留存方式和使用规则；对列入失信被执行人、重大税收违法案件当事人名单、政府采购严重违法失信行为记录名单的供应商应当拒绝其参与。用于审查资格条件中信用要求的合法性与设置方式。
+
+- title: 关于调整优化节能产品、环境标志产品政府采购执行机制的通知
+  doc_number: 财库〔2019〕9号
+  issuing_body: 财政部、国家发展改革委、生态环境部、市场监管总局
+  effective_date: 2019-02-01
+  category: notice
+  level: ministry
+  source_url: https://www.ccgp.gov.cn/zcfg/mof/201902/t20190213_11628855.htm
+  summary: 确立依据品目清单和认证证书实施政府优先采购和强制采购的执行机制，是审查需求文件是否落实节能环保产品采购政策的直接依据。
+
+- title: 关于印发节能产品政府采购品目清单的通知
+  doc_number: 财库〔2019〕19号
+  issuing_body: 财政部、国家发展改革委
+  effective_date: 2019-04-02
+  category: standard
+  level: ministry
+  source_url: https://www.ccgp.gov.cn/zcfg/mof/201904/t20190403_11849836.htm
+  summary: 列明节能产品政府采购品目清单，属于清单内品目的应执行强制采购或优先采购，用于核查需求文件是否遗漏节能产品政策要求。
+
+- title: 关于印发环境标志产品政府采购品目清单的通知
+  doc_number: 财库〔2019〕18号
+  issuing_body: 财政部、生态环境部
+  effective_date: 2019-03-29
+  category: standard
+  level: ministry
+  source_url: https://www.ccgp.gov.cn/zcfg/mof/201903/t20190330_11833800.htm
+  summary: 列明环境标志产品政府采购品目清单，用于核查需求文件是否落实环境标志产品优先采购政策。
+
+- title: 政府采购品目分类目录
+  doc_number: 财库〔2022〕31号
+  issuing_body: 财政部
+  effective_date: 2022-09-02
+  category: standard
+  level: ministry
+  source_url: https://www.ccgp.gov.cn/zcfg/mof/202209/t20220922_18696450.htm
+  summary: 确定采购项目属性、划分采购包和细化采购标的到底级品目的基础目录，用于审查采购需求标的归类是否规范、是否存在品目拆分规避公开招标。
+
+- title: 政府采购信息发布管理办法
+  doc_number: 财政部令第101号
+  issuing_body: 财政部
+  effective_date: ""
+  category: rule
+  level: ministry
+  source_url: https://www.ccgp.gov.cn/zcfg/mofgz/201912/t20191211_13537333.htm
+  summary: 规范政府采购信息发布主体、渠道、内容与时限，是采购公告、意向公开、结果公告合规性审查的程序依据。施行日期待人工复核。
+
+- title: 政府采购质疑和投诉办法
+  doc_number: 财政部令第94号
+  issuing_body: 财政部
+  effective_date: ""
+  category: rule
+  level: ministry
+  source_url: https://www.ccgp.gov.cn/zcfg/mofgz/201801/t20180103_9430153.htm
+  summary: 规定质疑与投诉的提出、答复与处理程序；需求文件中的歧视性、限制性条款是质疑投诉高发点，可作为需求审查风险预判依据。施行日期待人工复核。
+
+- title: 政府采购评审专家管理办法
+  doc_number: 财库〔2016〕198号
+  issuing_body: 财政部
+  effective_date: 2016-11-18
+  category: rule
+  level: ministry
+  source_url: https://www.ccgp.gov.cn/zcfg/mof/201702/t20170208_7908707.htm
+  summary: 规范评审专家选聘、抽取、回避与履职管理，用于审查采购需求中涉及评审组织安排（如自行选定专家条件）的合规性。
+
+- title: 政府采购代理机构管理暂行办法
+  doc_number: 财库〔2018〕2号
+  issuing_body: 财政部
+  effective_date: 2018-01-04
+  category: rule
+  level: ministry
+  source_url: https://www.ccgp.gov.cn/zcfg/mof/201801/t20180111_9468265.htm
+  summary: 规范采购代理机构名录登记与执业要求，用于审查需求文件中委托代理安排、代理费用收取标准等内容的合规性。
+
+- title: 关于开展政府采购备选库、名录库、资格库专项清理的通知
+  doc_number: 财办库〔2021〕14号
+  issuing_body: 财政部办公厅
+  effective_date: 2021-01-19
+  category: notice
+  level: ministry
+  source_url: https://www.ccgp.gov.cn/zcfg/mof/202101/t20210128_15856734.htm
+  summary: 要求清理以备选库、名录库、资格库等方式排斥潜在供应商的做法，是审查资格条件中「入库」「入围名录」「预选供应商库」等设置是否违规的直接依据。
+
+- title: 物业管理服务政府采购需求标准（办公场所类）（试行）
+  doc_number: 财办库〔2024〕113号
+  issuing_body: 财政部办公厅
+  effective_date: 2024-06-06
+  category: standard
+  level: ministry
+  source_url: https://www.ccgp.gov.cn/zcfg/mof/202406/t20240606_22306361.htm
+  summary: 高校后勤物业服务采购需求编制与审查的标准化依据，用于比对服务内容、人员配置、服务标准等要素是否完整规范。
+
+- title: 台式计算机政府采购需求标准（2023年版）
+  doc_number: 财库〔2023〕29号
+  issuing_body: 财政部、工业和信息化部
+  effective_date: 2023-12-16
+  category: standard
+  level: ministry
+  source_url: https://www.ccgp.gov.cn/zcfg/bzygf/202312/t20231227_21344827.htm
+  summary: 台式计算机采购需求的官方标准，用于核查高校通用信息化设备需求是否按标准设置技术参数，避免超标准配置和倾向性参数。
+
+- title: 便携式计算机政府采购需求标准（2023年版）
+  doc_number: 财库〔2023〕30号
+  issuing_body: 财政部、工业和信息化部
+  effective_date: 2023-12-16
+  category: standard
+  level: ministry
+  source_url: https://www.ccgp.gov.cn/zcfg/bzygf/202312/t20231227_21344822.htm
+  summary: 便携式计算机采购需求的官方标准，用于审查技术参数设置的合规性与合理性。
+
+- title: 通用服务器政府采购需求标准（2023年版）
+  doc_number: 财库〔2023〕33号
+  issuing_body: 财政部、工业和信息化部
+  effective_date: 2023-12-16
+  category: standard
+  level: ministry
+  source_url: https://www.ccgp.gov.cn/zcfg/bzygf/202312/t20231227_21344832.htm
+  summary: 通用服务器采购需求的官方标准，用于高校数据中心、机房建设项目需求审查。
+
+- title: 操作系统政府采购需求标准（2023年版）
+  doc_number: 财库〔2023〕34号
+  issuing_body: 财政部、工业和信息化部
+  effective_date: 2023-12-16
+  category: standard
+  level: ministry
+  source_url: https://www.ccgp.gov.cn/zcfg/bzygf/202312/t20231227_21344833.htm
+  summary: 操作系统采购需求的官方标准，用于审查软件类采购需求是否指向特定品牌或技术路线。
+
+- title: 数据库政府采购需求标准（2023年版）
+  doc_number: 财库〔2023〕35号
+  issuing_body: 财政部、工业和信息化部
+  effective_date: 2023-12-16
+  category: standard
+  level: ministry
+  source_url: https://www.ccgp.gov.cn/zcfg/bzygf/202312/t20231227_21344841.htm
+  summary: 数据库采购需求的官方标准，用于审查高校信息化项目需求参数的客观性与竞争性。
+
+- title: 绿色数据中心政府采购需求标准（试行）
+  doc_number: 财库〔2023〕7号
+  issuing_body: 财政部、生态环境部、工业和信息化部
+  effective_date: 2023-04-10
+  category: standard
+  level: ministry
+  source_url: https://www.ccgp.gov.cn/zcfg/mof/202304/t20230410_19680193.htm
+  summary: 绿色数据中心采购需求标准，用于高校机房与算力设施建设项目落实绿色发展政策要求的审查。
+
+- title: 政府采购合作创新采购方式管理暂行办法
+  doc_number: 财库〔2024〕13号
+  issuing_body: 财政部
+  effective_date: 2024-04-24
+  category: rule
+  level: ministry
+  source_url: https://www.ccgp.gov.cn/zcfg/mof/202404/t20240426_21937284.htm
+  summary: 规范合作创新采购方式适用情形与程序，用于审查高校科研创新产品采购是否具备适用条件、是否应落实支持创新政策。
+
+- title: 国务院办公厅关于印发《政府采购领域“整顿市场秩序、建设法规体系、促进产业发展”三年行动方案（2024—2026年）》的通知
+  doc_number: 国办发〔2024〕33号
+  issuing_body: 国务院办公厅
+  effective_date: 2024-06-29
+  category: notice
+  level: national
+  source_url: https://www.ccgp.gov.cn/zcfg/gwywj/202407/t20240709_22583066.htm
+  summary: 部署整治政府采购领域突出问题，明确将设置不合理条件排斥潜在供应商、以特定区域或行业业绩奖项限制竞争等列为重点治理内容，是需求审查风险点的政策指引。
+
+- title: 关于进一步提高政府采购透明度和采购效率相关事项的通知
+  doc_number: 财办库〔2023〕243号
+  issuing_body: 财政部办公厅
+  effective_date: 2023-12-08
+  category: notice
+  level: ministry
+  source_url: https://www.ccgp.gov.cn/zcfg/mof/202312/t20231215_21277483.htm
+  summary: 优化采购程序、提高透明度和采购效率的具体要求，用于审查采购需求与实施计划中的时限安排和信息公开安排。
+
+- title: 关于印发《商品包装政府采购需求标准（试行）》《快递包装政府采购需求标准（试行）》的通知
+  doc_number: 财办库〔2020〕123号
+  issuing_body: 财政部办公厅
+  effective_date: 2020-06-19
+  category: standard
+  level: ministry
+  source_url: https://www.ccgp.gov.cn/zcfg/mof/202007/t20200703_14587250.htm
+  summary: 商品包装与快递包装的政府采购需求标准，用于审查货物类采购需求中包装、运输要求的政策符合性。
+
+- title: 关于印发《政府采购公告和公示信息格式规范（2020年版）》的通知
+  doc_number: 财办库〔2020〕50号
+  issuing_body: 财政部办公厅
+  effective_date: 2020-03-18
+  category: standard
+  level: ministry
+  source_url: https://www.ccgp.gov.cn/zcfg/mof/202003/t20200325_14062417.htm
+  summary: 统一采购公告与公示信息的格式规范，用于核查采购需求文件与公告内容要素是否齐备一致。
+
+- title: 关于印发《中央国家机关政府集中采购目录实施方案（2020年版）》的通知
+  doc_number: ""
+  issuing_body: 中央国家机关政府采购中心
+  effective_date: ""
+  category: standard
+  level: ministry
+  source_url: https://www.ccgp.gov.cn/zcfg/bwfile/202005/t20200525_14348922.htm
+  summary: 中央国家机关政府集中采购目录的具体实施方案，用于核查目录内品目的执行方式与限额。文号与施行日期未能从官方页面核实，待人工复核。
+
+- title: 教育部（中央部门）直属高校政府采购管理相关规定
+  doc_number: ""
+  issuing_body: 教育部（待核）
+  effective_date: ""
+  category: notice
+  level: ministry
+  source_url: ""
+  summary: 占位条目。教育部及主管部门针对直属高校政府采购内控管理、需求管理、科研仪器设备采购的具体规范性文件，未能在本轮核实中找到可确证的官方原文与文号，须由业务方提供本单位适用的部门规章后补充入库，切勿沿用未经核实的文号。

@@ -1,0 +1,84 @@
+# ================= Python =================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+.eggs/
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# ================= Node =================
+node_modules/
+dist/
+dist-ssr/
+.vite/
+*.local
+.eslintcache
+
+# ================= Tauri / Rust =================
+src-tauri/target/
+target/
+Cargo.lock.bak
+
+# ================= 构建产物 =================
+build/
+release/
+out/
+*.exe
+*.msi
+*.msix
+*.dmg
+*.AppImage
+*.deb
+*.rpm
+!scripts/**/*.exe
+
+# ================= 运行期数据（用户本机数据，绝不入库） =================
+data/runtime/
+data/uploads/
+data/exports/
+data/cache/
+data/index/
+# 配置文件含 API Key，绝不入库
+data/config.json
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+*.db-wal
+*.db-shm
+
+# ================= 密钥与凭据 =================
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+secrets.json
+credentials.json
+providers.local.json
+
+# ================= 编辑器 / 系统 =================
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.example.json
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ================= 日志与临时文件 =================
+*.log
+logs/
+tmp/
+temp/
+~$*
+*.tmp
