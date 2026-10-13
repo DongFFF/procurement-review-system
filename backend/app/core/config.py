@@ -20,23 +20,82 @@ from pydantic import BaseModel, Field
 # ---------------------------------------------------------------------------
 # 路径解析：区分「开发态」和「打包态」
 # ---------------------------------------------------------------------------
+#
+# 打包成 exe（PyInstaller onefile）后存在两类路径，必须分开处理：
+#
+#   1. 只读资源（随包分发）：knowledge/、frontend/dist/
+#      → 位于 sys._MEIPASS 临时解压目录，程序退出即销毁
+#
+#   2. 可写数据（用户资产）：config.json、uploads/、exports/、index/
+#      → 必须放在 exe 同级目录，否则用户配置和文件会在重启后丢失
+#
+# 知识库比较特殊：它随包分发，但用户会通过界面添加/更新法规，
+# 因此首次运行时从只读资源复制一份到 exe 同级目录，之后读写都用副本。
+# 这样既保证开箱即用，又保证用户的更新能持久保存。
 
-def _app_root() -> Path:
-    """程序根目录。打包成 exe 后指向 exe 所在目录，开发态指向仓库根。"""
-    if getattr(sys, "frozen", False):
+
+def _is_frozen() -> bool:
+    return getattr(sys, "frozen", False)
+
+
+def _bundle_root() -> Path:
+    """只读资源根目录。打包态为 PyInstaller 解压目录，开发态为仓库根。"""
+    if _is_frozen():
+        meipass = getattr(sys, "_MEIPASS", None)
+        if meipass:
+            return Path(meipass)
         return Path(sys.executable).resolve().parent
-    # backend/app/core/config.py -> 上溯三层到仓库根
     return Path(__file__).resolve().parents[3]
 
 
+def _app_root() -> Path:
+    """可写根目录。打包态为 exe 所在目录，开发态为仓库根。"""
+    if _is_frozen():
+        return Path(sys.executable).resolve().parent
+    return Path(__file__).resolve().parents[3]
+
+
+BUNDLE_ROOT = _bundle_root()
 APP_ROOT = _app_root()
+
 BACKEND_ROOT = APP_ROOT / "backend"
-KNOWLEDGE_ROOT = APP_ROOT / "knowledge"
 DATA_ROOT = APP_ROOT / "data"
 
 
+def _resolve_knowledge_root() -> Path:
+    """
+    确定知识库目录（可写）。
+
+    - 开发态：直接用仓库里的 knowledge/
+    - 打包态：优先用 exe 同级的 knowledge/；不存在则从只读资源复制一份出来
+    """
+    user_kb = APP_ROOT / "knowledge"
+
+    if not _is_frozen():
+        return user_kb
+
+    bundled_kb = BUNDLE_ROOT / "knowledge"
+    if user_kb.exists():
+        return user_kb
+
+    # 首次运行：把随包的法规与规则复制到 exe 同级，之后可写可更新
+    if bundled_kb.is_dir():
+        try:
+            import shutil
+
+            shutil.copytree(bundled_kb, user_kb)
+        except Exception:
+            # 复制失败（如只读介质）则退回只读资源，保证程序仍能启动
+            return bundled_kb
+
+    return user_kb if user_kb.exists() else bundled_kb
+
+
+KNOWLEDGE_ROOT = _resolve_knowledge_root()
+
+
 def _user_data_dir() -> Path:
-    """用户数据目录（配置、上传、导出）。打包后放到 exe 同级 data/，便于绿色迁移。"""
+    """用户数据目录（配置、上传、导出），放在 exe 同级，便于绿色迁移。"""
     d = DATA_ROOT
     d.mkdir(parents=True, exist_ok=True)
     return d

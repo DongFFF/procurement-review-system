@@ -101,14 +101,30 @@ async def health() -> dict:
 # ---------------------------------------------------------------------------
 
 def _frontend_dir() -> Path | None:
-    candidates = [
-        APP_ROOT / "frontend" / "dist",
-        APP_ROOT / "web",
-        Path(getattr(sys, "_MEIPASS", "")) / "web" if getattr(sys, "_MEIPASS", None) else None,
-    ]
+    """
+    定位前端构建产物。
+
+    查找顺序：
+      1. PyInstaller 打包态：随包资源（sys._MEIPASS/frontend/dist）
+      2. 开发态：仓库里的 frontend/dist
+      3. 兜底：exe 同级的 web/ 或 frontend/dist
+    """
+    candidates: list[Path] = []
+
+    meipass = getattr(sys, "_MEIPASS", None)
+    if meipass:
+        candidates.append(Path(meipass) / "frontend" / "dist")
+        candidates.append(Path(meipass) / "web")
+
+    candidates.append(APP_ROOT / "frontend" / "dist")
+    candidates.append(APP_ROOT / "web")
+
     for c in candidates:
-        if c and Path(c).is_dir() and (Path(c) / "index.html").exists():
-            return Path(c)
+        try:
+            if c.is_dir() and (c / "index.html").exists():
+                return c
+        except OSError:
+            continue
     return None
 
 

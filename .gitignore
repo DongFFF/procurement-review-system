@@ -31,6 +31,7 @@ Cargo.lock.bak
 build/
 release/
 out/
+dist/
 *.exe
 *.msi
 *.msix
@@ -39,6 +40,10 @@ out/
 *.deb
 *.rpm
 !scripts/**/*.exe
+# PyInstaller 中间产物
+*.manifest
+warn-*.txt
+xref-*.html
 
 # ================= 运行期数据（用户本机数据，绝不入库） =================
 data/runtime/
@@ -48,6 +53,8 @@ data/cache/
 data/index/
 # 配置文件含 API Key，绝不入库
 data/config.json
+# exe 首次运行会在 dist/ 生成 knowledge 副本，不入库
+knowledge/.tmp/
 *.db
 *.sqlite
 *.sqlite3
