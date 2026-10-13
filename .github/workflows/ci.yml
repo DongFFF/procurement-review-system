@@ -1,0 +1,177 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: 测试（Python ${{ matrix.python-version }} / ${{ matrix.os }}）
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python-version: ["3.11", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 安装 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: backend/requirements.txt
+
+      - name: 安装依赖
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r backend/requirements.txt
+          pip install httpx
+
+      - name: 核心模块自检
+        run: python scripts/selftest.py
+        env:
+          PYTHONIOENCODING: utf-8
+
+      - name: 知识库与规则库测试
+        run: python scripts/test_kb.py
+        env:
+          PYTHONIOENCODING: utf-8
+
+      - name: 生成测试样例
+        run: python scripts/make_sample.py
+        env:
+          PYTHONIOENCODING: utf-8
+
+      - name: 全流程管道测试（无需 API Key）
+        run: python scripts/test_pipeline.py
+        env:
+          PYTHONIOENCODING: utf-8
+
+      - name: 知识库质量审计
+        run: python scripts/audit_kb.py
+        env:
+          PYTHONIOENCODING: utf-8
+
+      - name: 启动服务并跑接口测试
+        shell: bash
+        run: |
+          python backend/run_server.py --no-browser --port 8756 &
+          SERVER_PID=$!
+          for i in $(seq 1 60); do
+            if curl -sf http://127.0.0.1:8756/api/health > /dev/null; then
+              echo "服务已就绪"
+              break
+            fi
+            sleep 2
+          done
+          python scripts/test_api.py
+          kill $SERVER_PID
+        env:
+          PYTHONIOENCODING: utf-8
+
+  frontend:
+    name: 前端构建
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: pnpm
+          cache-dependency-path: frontend/pnpm-lock.yaml
+
+      - name: 安装依赖
+        working-directory: frontend
+        run: pnpm install --frozen-lockfile
+
+      - name: 构建
+        working-directory: frontend
+        run: pnpm run build
+
+      - name: 检查构建产物
+        run: test -f frontend/dist/index.html
+
+  rules:
+    name: 规则库校验
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 安装 PyYAML
+        run: pip install PyYAML
+
+      - name: 校验 YAML 语法与字段完整性
+        run: |
+          python - <<'PY'
+          import sys
+          from pathlib import Path
+          import yaml
+
+          errors = []
+
+          # 校验规则库
+          rf = Path("knowledge/rules/rules.yaml")
+          rules = yaml.safe_load(rf.read_text(encoding="utf-8"))
+          rules = rules if isinstance(rules, list) else rules.get("rules", [])
+
+          required = {"code", "name", "category", "severity", "legal_basis", "check_prompt"}
+          valid_sev = {"blocker", "high", "medium", "low"}
+          valid_cat = {"legality", "completeness", "technical", "commercial",
+                       "scoring", "policy", "budget", "procedure"}
+
+          seen = set()
+          for i, r in enumerate(rules, 1):
+              missing = required - set(r.keys())
+              if missing:
+                  errors.append(f"rules.yaml 第{i}条缺少字段: {missing}")
+              code = r.get("code")
+              if code in seen:
+                  errors.append(f"rules.yaml 规则代码重复: {code}")
+              seen.add(code)
+              if r.get("severity") not in valid_sev:
+                  errors.append(f"{code}: severity 非法 -> {r.get('severity')}")
+              if r.get("category") not in valid_cat:
+                  errors.append(f"{code}: category 非法 -> {r.get('category')}")
+
+          print(f"规则库：{len(rules)} 条规则，代码唯一性校验通过")
+
+          # 校验法规元数据
+          mf = Path("knowledge/regulations/_metadata.yaml")
+          if mf.exists():
+              meta = yaml.safe_load(mf.read_text(encoding="utf-8"))
+              meta = meta if isinstance(meta, list) else meta.get("regulations", [])
+              print(f"法规元数据：{len(meta)} 条")
+
+          # 校验法规全文文件
+          mds = list(Path("knowledge/regulations").glob("*.md"))
+          bad = []
+          for m in mds:
+              first = m.read_text(encoding="utf-8", errors="ignore").splitlines()
+              if not first or not first[0].startswith("# "):
+                  bad.append(m.name)
+          if bad:
+              errors.append(f"以下法规文件首行不是 '# 标题' 格式: {bad}")
+          print(f"法规全文：{len(mds)} 个文件")
+
+          if errors:
+              print("\n校验失败：")
+              for e in errors:
+                  print(f"  - {e}")
+              sys.exit(1)
+          print("\n全部校验通过")
+          PY

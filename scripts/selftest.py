@@ -226,29 +226,45 @@ def t_docx_roundtrip():
 
 # --- 8. FastAPI 应用装配 ---
 def t_app():
+    """校验 FastAPI 应用装配：所有预期路由都已注册。
+
+    注意：不能遍历 app.routes 来判断——新版 FastAPI 会把 include_router
+    的结果包成 _IncludedRouter，其子路由无法通过 .routes/.router 访问。
+    权威来源是 app.openapi()，它反映真正对外暴露的接口。
+    """
     from app.main import app
 
-    def collect(routes, out):
-        for r in routes:
-            p = getattr(r, "path", None)
-            if p:
-                out.append(p)
-            sub = getattr(r, "routes", None)
-            if sub:
-                collect(sub, out)
-            # 新版 FastAPI 把 include_router 结果包成 _IncludedRouter
-            inner = getattr(r, "router", None)
-            if inner is not None:
-                collect(getattr(inner, "routes", []), out)
+    spec = app.openapi()
+    paths = sorted(spec.get("paths", {}).keys())
+    assert paths, "OpenAPI 未生成任何路径，应用装配失败"
 
-    routes: list[str] = []
-    collect(app.routes, routes)
-    routes = sorted(set(routes))
+    # 关键接口必须存在
+    need = [
+        "/api/health",
+        "/api/config",
+        "/api/kb/status",
+        "/api/kb/search",
+        "/api/kb/rebuild",
+        "/api/kb/rules",
+        "/api/upload",
+        "/api/upload/formats",
+        "/api/review/stream",
+        "/api/review/reports",
+        "/api/rewrite/apply",
+        "/api/rewrite/preview",
+    ]
+    missing = [n for n in need if n not in paths]
+    assert not missing, f"缺少关键路由: {missing}"
 
-    need = ["/api/health", "/api/kb/status", "/api/upload", "/api/review/stream", "/api/rewrite/apply"]
-    missing = [n for n in need if not any(r.startswith(n) for r in routes)]
-    assert not missing, f"缺少路由: {missing}（已注册 {len(routes)} 条：{routes}）"
-    return f"{len(routes)} 条路由已注册"
+    # 分组统计，便于确认模块都挂上了
+    groups: dict[str, int] = {}
+    for p in paths:
+        parts = p.strip("/").split("/")
+        key = parts[1] if len(parts) > 1 else parts[0]
+        groups[key] = groups.get(key, 0) + 1
+
+    summary = "、".join(f"{k} {v}" for k, v in sorted(groups.items()))
+    return f"{len(paths)} 条路由（{summary}）"
 
 
 if __name__ == "__main__":

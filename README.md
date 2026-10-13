@@ -394,4 +394,31 @@ $env:PYTHONIOENCODING="utf-8"   # Windows 控制台中文输出
 
 ## 许可
 
-内部工具，未开源授权。
+本项目采用 [MIT License](LICENSE) 开源。
+
+你可以自由使用、修改、分发，包括商业用途，只需保留版权声明。
+欢迎其他高校和采购单位直接采用或二次开发。
+
+### 关于法规文本
+
+`knowledge/regulations/` 下的法规文件均来自政府官方网站（gov.cn / ccgp.gov.cn /
+mof.gov.cn 等）。根据《中华人民共和国著作权法》第五条，法律、法规，国家机关的
+决议、决定、命令和其他具有立法、行政、司法性质的文件不适用著作权法，
+因此这些文本可自由使用。
+
+### 贡献
+
+欢迎提交 Issue 和 Pull Request，特别是：
+
+- **补充法规全文** —— 目前 36 部法规有全文，另有 5 部仅有元数据
+  （见 `scripts/audit_kb.py` 的输出）
+- **新增审查规则** —— 在 `knowledge/rules/` 下添加 YAML 即可
+- **适配本单位制度** —— 各高校内部采购管理规定差异较大，欢迎贡献规则包
+
+提交前请运行测试：
+
+```powershell
+.\.venv\Scripts\python.exe scripts\test_pipeline.py   # 无需 API Key
+.\.venv\Scripts\python.exe scripts\audit_kb.py
+```
+
