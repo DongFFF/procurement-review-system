@@ -315,6 +315,13 @@ class KnowledgeBase:
         self.chunks = chunks
         self.documents = documents
 
+        # 关键：必须先清空旧向量。
+        # 否则在「先 load() 旧索引、再 build() 新索引」的场景下，
+        # self.vectors 仍是旧的行数，会因形状不匹配导致向量检索静默失效
+        # （表现为所有结果得分都等于 bm25 分量，检索质量大幅下降）。
+        self.vectors = None
+        self.embed_mode = "local"
+
         # BM25
         self.bm25.fit([c.text for c in chunks])
 
