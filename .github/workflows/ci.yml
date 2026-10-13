@@ -83,7 +83,8 @@ jobs:
 
       - uses: pnpm/action-setup@v4
         with:
-          version: 9
+          # 与本地生成 pnpm-lock.yaml 的版本保持一致
+          version: 11
 
       - uses: actions/setup-node@v4
         with:

@@ -2,6 +2,10 @@
 
 > 知识库驱动的大模型采购需求合规审查与自动修订平台
 
+[![CI](https://github.com/DongFFF/procurement-review-system/actions/workflows/ci.yml/badge.svg)](https://github.com/DongFFF/procurement-review-system/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Release](https://img.shields.io/github/v/release/DongFFF/procurement-review-system)](https://github.com/DongFFF/procurement-review-system/releases/latest)
+
 面向中央部门直属高校（中直高校）的政府采购需求文件审查工具。上传采购需求文件，
 系统依据法规知识库逐条审查，输出**可追溯、可执行**的整改意见，用户勾选后**自动修订**文档。
 

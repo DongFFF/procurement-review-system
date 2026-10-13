@@ -82,6 +82,21 @@ class RewriteResult:
         }
 
 
+def _fmt_cn_datetime(dt: datetime, with_time: bool = True) -> str:
+    """
+    格式化为中文日期字符串，例如「2026年10月13日 09:30」。
+
+    不能用 dt.strftime('%Y年%m月%d日')：Windows 上 strftime 会用系统区域编码
+    去编码格式串，在非中文/非 UTF-8 区域的机器上会抛
+    UnicodeEncodeError: 'locale' codec can't encode character '\\u5e74'。
+    所以这里只对数字部分用 strftime（纯 ASCII 安全），中文部分直接拼接。
+    """
+    date_part = f"{dt.strftime('%Y')}年{dt.strftime('%m')}月{dt.strftime('%d')}日"
+    if not with_time:
+        return date_part
+    return f"{date_part} {dt.strftime('%H:%M')}"
+
+
 # ---------------------------------------------------------------------------
 # 文本归一化与匹配
 # ---------------------------------------------------------------------------
@@ -389,7 +404,7 @@ class DocumentRewriter:
             pass
 
         meta = doc.add_paragraph(
-            f"修订时间：{datetime.now().strftime('%Y年%m月%d日 %H:%M')}    "
+            f"修订时间：{_fmt_cn_datetime(datetime.now())}    "
             f"修订项数：{len(changes)}"
         )
         try:
@@ -467,7 +482,7 @@ def export_report_docx(report_dict: dict[str, Any], *, output_name: str | None =
     info = doc.add_paragraph()
     info.add_run(f"被审查文件：{report_dict.get('filename', '')}\n").font.size = Pt(10.5)
     info.add_run(
-        f"审查时间：{datetime.fromtimestamp(report_dict.get('created_at', 0)).strftime('%Y年%m月%d日 %H:%M')}\n"
+        f"审查时间：{_fmt_cn_datetime(datetime.fromtimestamp(report_dict.get('created_at', 0)))}\n"
     ).font.size = Pt(10.5)
     mi = report_dict.get("model_info", {})
     info.add_run(f"审查模型：{mi.get('provider', '')} / {mi.get('model', '')}\n").font.size = Pt(10.5)
