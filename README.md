@@ -36,12 +36,16 @@
 
 ## 快速开始
 
-### 方式一：桌面端（推荐，无需配置环境）
+### 方式一：直接下载 exe（推荐，零门槛）
 
-1. 下载并运行安装包 `中直高校采购需求审查系统_x.x.x_x64-setup.exe`
-2. 双击桌面图标启动
-3. 首次使用：进入 **系统设置** → 选择模型供应商 → 填写 API Key → **测试连接** → 设为审查模型
-4. 回到 **审查工作台** → 上传采购需求文件 → **开始审查**
+**[⬇ 下载最新版](https://github.com/DongFFF/procurement-review-system/releases/latest)**
+
+下载 `procurement-review-system-v0.1.0-win64.exe`（约 52 MB），放到任意目录双击运行。
+**无需安装 Python、Node.js 或任何环境。**
+
+首次启动约 10-30 秒（会初始化知识库索引），随后浏览器自动打开界面。
+
+然后按 [使用手册](docs/使用手册.md) 配置模型即可开始使用。
 
 ### 方式二：源码运行（开发/调试）
 
@@ -62,6 +66,8 @@ cd ..
 
 访问 http://127.0.0.1:8756
 
+> Windows 用户也可以直接双击根目录的 **`启动.bat`**，它会自动完成上述全部步骤。
+
 开发态前后端分离（前端热更新）：
 
 ```powershell
@@ -73,6 +79,18 @@ cd frontend; pnpm run dev
 ```
 
 访问 http://localhost:5173
+
+### 方式三：自行打包 exe
+
+```powershell
+# PyInstaller（快，无需 Rust）
+.\.venv\Scripts\python.exe -m PyInstaller --clean --noconfirm scripts\desktop.spec
+
+# 或 Tauri（安装包更小，需 Rust + MSVC 工具链）
+.\scripts\build_desktop.ps1
+```
+
+详见 [打包说明](docs/打包说明.md)。
 
 ---
 
@@ -130,14 +148,13 @@ cd frontend; pnpm run dev
 │       ├── api.js              接口客户端
 │       └── styles.css          样式
 │
-├── src-tauri/                  桌面端封装（Tauri）
+├── src-tauri/                  桌面端封装（Tauri 路线，安装包更小）
 │
 ├── knowledge/                  知识库数据（版本化管理）
-│   ├── regulations/            法规文件
-│   │   ├── _metadata.yaml      法规元数据清单
-│   │   └── *.md                法规全文
-│   └── rules/
-│       └── rules.yaml          69 条结构化审查规则
+│   ├── regulations/            法规文件（36 部全文 + 元数据清单）
+│   ├── rules/
+│   │   └── rules.yaml          69 条结构化审查规则
+│   └── samples/                测试样例（含 22 处典型违规点）
 │
 ├── data/                       运行期数据（不入库）
 │   ├── config.json             用户配置（含 API Key，仅存本地）
@@ -145,12 +162,42 @@ cd frontend; pnpm run dev
 │   ├── exports/                生成的修订版与报告
 │   └── index/                  知识库索引
 │
-└── scripts/                    工具脚本
+├── dist/                       打包产物
+│   └── 中直高校采购需求审查系统.exe
+│
+├── docs/
+│   ├── 使用手册.md             面向采购人员的操作说明
+│   └── 打包说明.md             桌面端打包指南
+│
+├── 启动.bat                    绿色版一键启动（自动建环境、装依赖、构建、运行）
+│
+└── scripts/
+    ├── selftest.py             核心模块自检
+    ├── test_kb.py              知识库检索与规则粗筛验证
+    ├── test_api.py             接口端到端测试
+    ├── test_pipeline.py        全流程管道验证（模拟模型，无需 API Key）
+    ├── audit_kb.py             知识库质量审计（条款可溯源验证）
+    ├── make_sample.py          生成含典型违规点的测试文件
+    ├── desktop.spec            PyInstaller 打包配置
+    ├── build_desktop.ps1       Tauri 打包脚本
+    └── dev.ps1                 开发模式一键启动
 ```
 
 ---
 
 ## 知识库设计
+
+### 当前内容
+
+**36 部法规全文**（约 91 万字）+ 38 部法规元数据，索引为 **570 个检索片段**。
+
+核心法规包括：政府采购法及实施条例、政府采购需求管理办法（财库〔2021〕22号）、
+87号令、74号令、110号令、中小企业促进办法、进口产品管理办法、
+节能环保品目清单、政府采购品目分类目录（3,671 条编码）、
+台式机/笔记本/服务器等 5 个需求标准。
+
+**质量保证**：`scripts/audit_kb.py` 会验证规则库引用的每一条法规条款
+是否真的能在知识库全文中找到。当前**条款可验证率 100%**（61/61）。
 
 ### 为什么用「混合检索」而不是纯向量
 
@@ -162,7 +209,7 @@ cd frontend; pnpm run dev
 | **精确查询** | "财库〔2021〕22号"、"第二十条" | BM25 关键词 |
 
 系统把两者**加权融合**（默认向量 0.55 / BM25 0.45），并对文号、条款号做额外加成，
-兼顾查得全与查得准。
+兼顾查得全与查得准。实测首位命中正确法规 90%、前 5 位 100%。
 
 ### 嵌入向量策略
 
@@ -258,15 +305,62 @@ cd frontend; pnpm run dev
 
 ## 打包桌面端
 
+两条路线，共用同一套后端与前端代码。
+
+### 路线 A：PyInstaller（推荐，无需 Rust）
+
 ```powershell
-# 需要 Rust 工具链 + MSVC 生成工具
-cd frontend; pnpm run build
-cd ..; .\scripts\build_desktop.ps1
+cd frontend; pnpm run build; cd ..
+.\.venv\Scripts\python.exe -m PyInstaller --clean --noconfirm scripts\desktop.spec
+```
+
+产物：`dist/中直高校采购需求审查系统.exe`（约 52 MB，单文件）
+
+### 路线 B：Tauri（安装包更小，约 10-15 MB）
+
+需要 Rust 工具链 + MSVC C++ 生成工具：
+
+```powershell
+winget install Rustlang.Rustup
+winget install Microsoft.VisualStudio.2022.BuildTools --override "--quiet --wait --add Microsoft.VisualStudio.Workload.VCTools --includeRecommended"
+
+cd frontend; pnpm run build; cd ..
+.\scripts\build_desktop.ps1
 ```
 
 产物位于 `src-tauri/target/release/bundle/nsis/`。
 
 详见 [docs/打包说明.md](docs/打包说明.md)。
+
+---
+
+## 测试
+
+```powershell
+$env:PYTHONIOENCODING="utf-8"   # Windows 控制台中文输出
+
+.\.venv\Scripts\python.exe scripts\selftest.py      # 核心模块自检（8 项）
+.\.venv\Scripts\python.exe scripts\test_kb.py       # 知识库检索与规则粗筛
+.\.venv\Scripts\python.exe scripts\test_api.py      # 接口端到端（8 项）
+.\.venv\Scripts\python.exe scripts\test_pipeline.py # 全流程管道（36 项，无需 API Key）
+.\.venv\Scripts\python.exe scripts\audit_kb.py      # 知识库质量审计
+```
+
+### 当前状态
+
+| 检查项 | 结果 |
+|-------|------|
+| 核心模块自检 | 通过 |
+| 接口端到端测试 | 8/8 通过 |
+| 全流程管道测试 | 36/36 通过 |
+| 知识库条款可验证率 | **100%**（61/61） |
+| 检索首位命中率 | 90% |
+| 检索前 5 位命中率 | 100% |
+| 打包 exe 实机验证 | 通过 |
+
+`test_pipeline.py` 用模拟模型跑通全链路，并刻意注入真实模型常见的脏输出
+（markdown 围栏、缺字段、尾随逗号、低置信度、原文摘录被改写），
+验证系统的容错能力——**不需要 API Key 即可验证整条管线**。
 
 ---
 
