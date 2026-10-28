@@ -73,10 +73,16 @@ async def update_config(payload: dict) -> dict:
     # 其他标量字段
     for field in (
         "active_provider_id",
+        "review_mode",
         "concurrency",
         "max_chunk_chars",
         "retrieval_top_k",
         "enable_rule_prefilter",
+        "enable_triage",
+        "enable_validation",
+        "enable_arbitration",
+        "enable_synthesis",
+        "enable_evidence_check",
         "kb_auto_update",
         "kb_update_interval_hours",
         "kb_remote_sources",

@@ -32,6 +32,35 @@ class ReviewIn(BaseModel):
     provider_id: str | None = None
     only_rules: list[str] | None = None
     concurrency: int | None = None
+    # 覆盖全局设置：single=单智能体；multi=多智能体协同
+    mode: str | None = None
+
+
+def _make_engine(gateway: LLMGateway, mode: str | None):
+    """
+    按模式构造审查引擎。
+
+    - single：逐规则独立审查（原有实现，作为对照基线）
+    - multi ：多智能体协同审查（分诊 → 专项 → 交叉验证 → 仲裁 → 汇总）
+
+    两者产出同构的 ReviewReport，下游（勾选/修订/导出）无需区分。
+    """
+    from ..core.multiagent import MultiAgentReviewEngine
+
+    use_multi = (mode or settings.review_mode) == "multi"
+    if not use_multi:
+        return ReviewEngine(gateway, kb=get_kb(), library=get_rule_library())
+
+    return MultiAgentReviewEngine(
+        gateway,
+        kb=get_kb(),
+        library=get_rule_library(),
+        enable_triage=settings.enable_triage,
+        enable_validation=settings.enable_validation,
+        enable_arbitration=settings.enable_arbitration,
+        enable_synthesis=settings.enable_synthesis,
+        enable_evidence_check=settings.enable_evidence_check,
+    )
 
 
 def _gateway(provider_id: str | None) -> LLMGateway:
@@ -79,7 +108,7 @@ async def start_review(payload: ReviewIn) -> dict:
     if payload.concurrency:
         settings.concurrency = max(1, min(16, payload.concurrency))
 
-    engine = ReviewEngine(gateway, kb=get_kb(), library=get_rule_library())
+    engine = _make_engine(gateway, payload.mode)
     report = await engine.review(doc, only_rules=payload.only_rules)
     _REPORTS[report.review_id] = report
     return report.to_dict()
@@ -102,7 +131,7 @@ async def stream_review(payload: ReviewIn) -> StreamingResponse:
 
     async def worker() -> None:
         try:
-            engine = ReviewEngine(gateway, kb=get_kb(), library=get_rule_library())
+            engine = _make_engine(gateway, payload.mode)
 
             def on_progress(code: str, done: int, total: int, msg: str) -> None:
                 queue.put_nowait(

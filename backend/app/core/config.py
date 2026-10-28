@@ -216,12 +216,31 @@ class AppSettings(BaseModel):
     active_provider_id: str = Field(default="", description="当前用于审查的供应商")
 
     # --- 审查行为 ---
+    review_mode: Literal["single", "multi"] = Field(
+        default="multi",
+        description="审查模式：single=单智能体逐规则审查；multi=多智能体协同审查",
+    )
     concurrency: int = Field(default=4, ge=1, le=16, description="并发审查的规则数")
     max_chunk_chars: int = Field(default=6000, description="送入模型单段最大字符数")
     retrieval_top_k: int = Field(default=8, description="每条规则检索的法规片段数")
     enable_rule_prefilter: bool = Field(
         default=True,
         description="先用关键词粗筛规则，减少无谓的模型调用（省钱提速）",
+    )
+
+    # --- 多智能体协同开关（仅 review_mode=multi 时生效）---
+    enable_triage: bool = Field(default=True, description="启用分诊智能体")
+    enable_validation: bool = Field(
+        default=True, description="启用交叉验证智能体（对抗式复核，抑制误报）"
+    )
+    enable_arbitration: bool = Field(
+        default=True, description="启用仲裁智能体（仅专项与复核结论分歧时触发）"
+    )
+    enable_synthesis: bool = Field(
+        default=True, description="启用汇总智能体（生成总体评述与优先整改建议）"
+    )
+    enable_evidence_check: bool = Field(
+        default=True, description="启用证据一致性校验（ECV），作为交叉验证的前置过滤器"
     )
 
     # --- 知识库 ---

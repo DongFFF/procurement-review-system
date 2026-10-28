@@ -1,0 +1,100 @@
+{
+  "experiment": "ECV 机制验证",
+  "dataset": {
+    "total": 140,
+    "groups": {
+      "T": 40,
+      "F1": 20,
+      "F2": 20,
+      "F3": 20,
+      "F4": 20,
+      "F5": 20
+    },
+    "source_document": "XX大学高性能计算平台采购需求文件_含典型问题.docx",
+    "source_chars": 1835,
+    "corpus_regulations": 41,
+    "kb_chunks": 570
+  },
+  "confusion_matrix": {
+    "tp": 60,
+    "fn": 40,
+    "fp": 0,
+    "tn": 40
+  },
+  "metrics": {
+    "sensitivity": 60.0,
+    "specificity": 100.0,
+    "accuracy": 71.43,
+    "block_precision": 100.0,
+    "block_ratio": 42.86
+  },
+  "by_defect_type": {
+    "evidence_type": {
+      "groups": [
+        "F1",
+        "F2",
+        "F3"
+      ],
+      "n": 60,
+      "detected": 60,
+      "rate": 100.0
+    },
+    "legal_type": {
+      "groups": [
+        "F4",
+        "F5"
+      ],
+      "n": 40,
+      "detected": 0,
+      "rate": 0.0
+    },
+    "true_positive_false_kill": {
+      "n": 40,
+      "killed": 0,
+      "rate": 0.0
+    }
+  },
+  "per_group": {
+    "T": {
+      "n": 40,
+      "blocked": 0,
+      "rate": 0.0
+    },
+    "F1": {
+      "n": 20,
+      "blocked": 20,
+      "rate": 100.0
+    },
+    "F2": {
+      "n": 20,
+      "blocked": 20,
+      "rate": 100.0
+    },
+    "F3": {
+      "n": 20,
+      "blocked": 20,
+      "rate": 100.0
+    },
+    "F4": {
+      "n": 20,
+      "blocked": 0,
+      "rate": 0.0
+    },
+    "F5": {
+      "n": 20,
+      "blocked": 0,
+      "rate": 0.0
+    }
+  },
+  "cost": {
+    "total_ms": 323.2,
+    "per_item_ms": 2.309,
+    "llm_review_ratio": 57.14,
+    "saving_ratio": 42.86
+  },
+  "reasons": {
+    "原文摘录未能在文件中逐字定位（疑似改写或臆造）": 20,
+    "引用条款在《法规》中不存在": 36,
+    "依据与问题类别「技术参数倾向性」不匹配": 12
+  }
+}
