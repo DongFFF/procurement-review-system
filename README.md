@@ -71,7 +71,8 @@ The default review mode. Single-agent per-rule review remains available as a bas
 
 ```
 document ──▶ ① triage agent          project profile: type, budget, risk, focus areas
-                 │ route rules by domain
+                 │ profile injected into every specialist prompt
+                 │ rules routed by their annotated section/domain
    ┌──────┬──────┼──────┬────────┬──────────┐
    ▼      ▼      ▼      ▼        ▼          ▼
  ②legality ②technical ②commercial ②scoring ②policy ②completeness
