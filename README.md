@@ -55,10 +55,58 @@ citation tracing for verifiability**, and **automatic document revision for fixa
 | **Regulation knowledge base** | 36 full regulation texts (~910k characters), plus upload, URL ingestion, and scheduled auto-update |
 | **Hybrid retrieval** | Vector semantic search + BM25 keyword search + exact-match boost for document numbers and article numbers |
 | **Structured rule library** | 69 executable review rules across 8 categories; YAML-maintained with hot reload |
+| **Multi-agent review** | Triage → six domain specialists → evidence check → cross-validation → arbitration → synthesis (see below) |
+| **Evidence consistency check** | Deterministic, millisecond-level filter that drops findings whose quote, clause or legal domain does not check out |
 | **LLM review engine** | Per-rule model evaluation, forced JSON output, confidence scores, human-review flags |
 | **Any model provider** | Any OpenAI-compatible endpoint: official APIs, local Ollama/vLLM, gateway proxies, on-premise deployments |
 | **Automatic revision** | Writes selected findings back into Word, preserves formatting, highlights changes, appends a change log |
 | **Clear conclusions** | Overall verdict (fail / needs revision / pass) + severity-ranked issue list + legal basis + ready-to-apply replacement text |
+
+---
+
+## Multi-agent review (MACR)
+
+The default review mode. Single-agent per-rule review remains available as a baseline
+(`review_mode: "single"`).
+
+```
+document ──▶ ① triage agent          project profile: type, budget, risk, focus areas
+                 │ route rules by domain
+   ┌──────┬──────┼──────┬────────┬──────────┐
+   ▼      ▼      ▼      ▼        ▼          ▼
+ ②legality ②technical ②commercial ②scoring ②policy ②completeness
+   └──────┴──────┼──────┴────────┴──────────┘
+                 ▼ candidate findings
+      ③ evidence consistency check   deterministic, ~2 ms per finding
+                 │ survivors only
+                 ▼
+      ④ cross-validation agent       tasked with finding counter-evidence
+                 │ uphold / reject / revise
+                 ▼
+      ⑤ arbitration agent            only for disagreements
+                 ▼
+      ⑥ synthesis agent              verdict, key risks, priority action
+```
+
+Two mechanisms carry the design. **Cognitive division**: each specialist sees only its
+own domain's rules and sections, so attention is not diluted across 69 rules.
+**Adversarial verification**: the cross-validator is instructed to look for
+counter-evidence rather than to "check again", which puts the model in a falsifying
+position instead of a confirming one.
+
+The evidence consistency check (`backend/app/core/evidence.py`) runs before any model
+call and verifies three computable signals: whether the quoted text appears in the
+document, whether the cited article number exists in that regulation's full text, and
+whether the cited regulation belongs to the finding's domain. It only falsifies — a
+finding that passes may still be wrong — but it removes findings that cannot be
+evidence-backed before paying for a model call.
+
+> **Scope of validation.** The framework's end-to-end behaviour has **not** been
+> measured with a real language model, and the sample procurement document in
+> `knowledge/samples/` is synthetic. What is verified: pipeline correctness with a
+> scripted stand-in, retrieval quality, citation traceability, and the deterministic
+> checker's behaviour on a constructed test set. See
+> [docs/论文交付说明.md](docs/论文交付说明.md) for the verification matrix.
 
 ---
 

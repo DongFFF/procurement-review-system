@@ -470,6 +470,87 @@ export default function ReviewPage({ config, onGoSettings }) {
             </div>
           </div>
 
+          {/* 多智能体协同过程 */}
+          {report.mode === 'multi' && (
+            <Card title="协同过程" sub="多智能体协同审查的执行记录">
+              {report.profile && (
+                <div style={{ marginBottom: 12 }}>
+                  <div className="dim" style={{ fontSize: 12, marginBottom: 5 }}>
+                    项目画像
+                  </div>
+                  <div>
+                    <span className="cite">类型 {report.profile.project_type || '未识别'}</span>
+                    {report.profile.budget && (
+                      <span className="cite">预算 {report.profile.budget}</span>
+                    )}
+                    <span className="cite">风险 {report.profile.risk_level}</span>
+                    {(report.profile.focus_areas || []).map((a, i) => (
+                      <span key={i} className="cite">
+                        重点 {a}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div>
+                <div className="dim" style={{ fontSize: 12, marginBottom: 5 }}>
+                  各环节
+                </div>
+                {(report.traces || []).map((t, i) => (
+                  <div
+                    key={i}
+                    style={{
+                      display: 'flex',
+                      gap: 10,
+                      fontSize: 12.5,
+                      padding: '3px 0',
+                      alignItems: 'baseline',
+                    }}
+                  >
+                    <span style={{ minWidth: 150, fontWeight: 500 }}>{t.agent}</span>
+                    <span className="dim">调用 {t.calls} 次</span>
+                    <span className="dim">{t.elapsed}s</span>
+                    {t.note && <span className="dim">{t.note}</span>}
+                  </div>
+                ))}
+              </div>
+
+              {report.collaboration && (
+                <div className="dim" style={{ fontSize: 12, marginTop: 9 }}>
+                  前置拦截 {report.collaboration.ecv_blocked_count} 条 · 交叉验证{' '}
+                  {report.collaboration.validator_calls} 条 · 仲裁{' '}
+                  {report.collaboration.arbiter_calls} 条 · 驳回{' '}
+                  {report.collaboration.rejected_count} 条 · 修正{' '}
+                  {report.collaboration.revised_count} 条
+                </div>
+              )}
+
+              {report.summary?.overall_comment && (
+                <div className="mt12">
+                  <div className="dim" style={{ fontSize: 12, marginBottom: 5 }}>
+                    总体评述
+                  </div>
+                  <div style={{ fontSize: 13, lineHeight: 1.7 }}>
+                    {report.summary.overall_comment}
+                  </div>
+                  {(report.summary.key_risks || []).length > 0 && (
+                    <ul style={{ margin: '8px 0 0', paddingLeft: 20, fontSize: 12.5 }}>
+                      {report.summary.key_risks.map((r, i) => (
+                        <li key={i}>{r}</li>
+                      ))}
+                    </ul>
+                  )}
+                  {report.summary.priority_action && (
+                    <div className="suggest" style={{ marginTop: 8 }}>
+                      优先整改：{report.summary.priority_action}
+                    </div>
+                  )}
+                </div>
+              )}
+            </Card>
+          )}
+
           {report.errors?.length > 0 && (
             <Alert kind="warn">
               有 {report.errors.length} 条规则执行异常（通常是模型接口波动），可点击「重审」重试。

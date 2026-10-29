@@ -341,6 +341,45 @@ export default function SettingsPage({ config, reload }) {
 
       {/* ---------------- 审查参数 ---------------- */}
       <Card title="审查参数">
+        <Field
+          label="审查模式"
+          hint="多智能体：分诊→专项→证据校验→交叉验证→仲裁→汇总；单智能体：逐规则独立判断（基线，更快更省）"
+        >
+          <select
+            value={draft.review_mode || 'multi'}
+            onChange={(e) => setTop({ review_mode: e.target.value })}
+          >
+            <option value="multi">多智能体协同审查（默认）</option>
+            <option value="single">单智能体逐规则审查（基线）</option>
+          </select>
+        </Field>
+
+        {(draft.review_mode || 'multi') === 'multi' && (
+          <div className="grid-2" style={{ marginBottom: 4 }}>
+            <Field label="协同环节开关" hint="关闭后可作消融对照">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 13 }}>
+                {[
+                  ['enable_triage', '分诊智能体'],
+                  ['enable_evidence_check', '证据一致性校验'],
+                  ['enable_validation', '交叉验证智能体'],
+                  ['enable_arbitration', '仲裁智能体'],
+                  ['enable_synthesis', '汇总智能体'],
+                ].map(([key, label]) => (
+                  <label key={key} style={{ display: 'flex', gap: 7, alignItems: 'center' }}>
+                    <input
+                      type="checkbox"
+                      style={{ width: 15, height: 15 }}
+                      checked={draft[key] !== false}
+                      onChange={(e) => setTop({ [key]: e.target.checked })}
+                    />
+                    {label}
+                  </label>
+                ))}
+              </div>
+            </Field>
+          </div>
+        )}
+
         <div className="grid-3">
           <Field label="并发审查数" hint="越大越快，但可能触发接口限流">
             <input
