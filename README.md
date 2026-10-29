@@ -202,7 +202,9 @@ See [packaging guide](docs/打包说明.md) (Chinese).
 ├── docs/
 │   ├── README.zh-CN.md         简体中文 README
 │   ├── 使用手册.md              User manual
-│   └── 打包说明.md              Packaging guide
+│   ├── 打包说明.md              Packaging guide
+│   ├── 文献插入工作流.md        Programmatic Zotero citation-field workflow
+│   └── 论文交付说明.md          Paper delivery status & verification matrix
 │
 ├── 启动.bat                    One-click launcher (portable build)
 │
@@ -213,6 +215,12 @@ See [packaging guide](docs/打包说明.md) (Chinese).
     ├── test_pipeline.py        Full pipeline test (mock model, no API key needed)
     ├── audit_kb.py             Knowledge base quality audit (citation traceability)
     ├── make_sample.py          Generates a test document with seeded violations
+    ├── build_references.py     CNKI citation parsing → Zotero ingestion → bibliography
+    ├── zotero_extract_reference.py  Extract field structure from a reference .docx
+    ├── zotero_fields.py        Zotero field & document-prefs injection + self-check
+    ├── build_paper.py          Paper DOCX builder (--zotero for field version)
+    ├── test_split_instructions.py  Regression: parse fields split across runs
+    ├── push_via_api.py         Push via GitHub API when git/HTTPS is blocked
     ├── desktop.spec            PyInstaller spec
     ├── build_desktop.ps1       Tauri build script
     └── dev.ps1                 Dev-mode launcher

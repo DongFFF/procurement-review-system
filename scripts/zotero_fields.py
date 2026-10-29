@@ -24,6 +24,7 @@ Zotero 引文字段注入工具。
 
 from __future__ import annotations
 
+import html
 import json
 import os
 import re
@@ -282,6 +283,26 @@ def inject_zotero_prefs(docx_path: Path, style_id: str) -> None:
 # 结构自检
 # ---------------------------------------------------------------------------
 
+INSTR_RE = re.compile(r"<(?:\w+:)?instrText[^>]*>(.*?)</(?:\w+:)?instrText>", re.S)
+ITEM_RE = re.compile(
+    r"ADDIN ZOTERO_ITEM CSL_CITATION\s*(\{.*?\})(?=\s*ADDIN|\s*$)", re.S
+)
+BIBL_RE = re.compile(
+    r"ADDIN ZOTERO_BIBL\s*\{.*?\}(?=\s*CSL_BIBLIOGRAPHY|\s*ADDIN|\s*$)", re.S
+)
+
+
+def _instruction_stream(document: str) -> str:
+    """
+    按文档顺序拼接所有字段指令。
+
+    Word 会把一条长指令拆进多个 run（打开并保存一次就可能发生），
+    因此直接对原 XML 用「JSON 紧跟 </w:instrText>」的正则会全部失配，
+    表现为 json_failures 等于字段数。先拼接再解析可同时覆盖拆分与未拆分两种情形。
+    """
+    return "".join(html.unescape(chunk) for chunk in INSTR_RE.findall(document))
+
+
 def inspect(docx_path: Path) -> dict:
     """统计字段数量与完整性，用于交付前自检。"""
     with zipfile.ZipFile(docx_path) as z:
@@ -291,11 +312,13 @@ def inspect(docx_path: Path) -> dict:
         if has_custom:
             prefs = z.read("docProps/custom.xml").decode("utf-8")
 
-    items = re.findall(r"ADDIN ZOTERO_ITEM CSL_CITATION (\{.*?\})\s*</w:instrText>", doc, re.S)
-    bibl = re.findall(r"ADDIN ZOTERO_BIBL", doc)
-    begin = doc.count('w:fldCharType="begin"')
-    end = doc.count('w:fldCharType="end"')
-    sep = doc.count('w:fldCharType="separate"')
+    stream = _instruction_stream(doc)
+    items = ITEM_RE.findall(stream)
+    bibl = BIBL_RE.findall(stream)
+    # 属性名同样存在命名空间前缀差异（w: 与 ns0:），按子串计数即可
+    begin = doc.count('fldCharType="begin"')
+    end = doc.count('fldCharType="end"')
+    sep = doc.count('fldCharType="separate"')
 
     parsed, bad_json, multi = 0, 0, 0
     keys: set[str] = set()
