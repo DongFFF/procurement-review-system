@@ -95,13 +95,58 @@ own domain's rules and sections, so attention is not diluted across 69 rules.
 counter-evidence rather than to "check again", which puts the model in a falsifying
 position instead of a confirming one.
 
+### Where subsumption sits
+
+Legal review turns on **subsumption**: fitting a concrete fact pattern under the
+constituent elements of a norm, then deciding whether that norm's consequence applies.
+It is not lookup. Reading "512GB memory" and locating 《政府采购法实施条例》第二十条第六项
+is retrieval; deciding whether *specifying* that memory figure amounts to
+"restricting suppliers by unreasonable conditions" requires interpreting the elements
+against the project's actual needs — the article does not contain the answer.
+
+The framework assigns this deliberately:
+
+- **The model does the subsumption.** Each specialist receives the rule, the retrieved
+  provisions and its own document sections, and decides whether the rule is violated
+  and on what basis. The cross-validator performs the reverse: it is asked to subsume
+  the same facts toward a *non*-violation.
+- **The evidence check does not, and is not expected to.** It compares strings and sets
+  only. It never reads what a provision means.
+
+The split is justified by cost, not by capability ranking: model calls are second-scale
+and metered, evidence checks are millisecond-scale and nearly free. The framework does
+**not** assume the model subsumes correctly — that is an empirical question this project
+has not yet tested.
+
 The evidence consistency check (`backend/app/core/evidence.py`) runs before any model
 call and verifies three computable signals: whether the quoted text appears in the
 document, whether the cited article number exists in that regulation's full text, and
 whether the cited regulation belongs to the finding's domain. It only falsifies — a
-finding that passes may still be wrong — but it removes findings that cannot be
-evidence-backed before paying for a model call.
+finding that passes may still be wrong.
 
+> **Known design trade-off.** The current implementation *discards* findings that fail
+> the evidence check; they never reach the model. On constructed tests this costs
+> nothing, but on real documents a model that paraphrases a quote, abbreviates
+> "第二十条第六项" to "第二十条", or cites a provision generically could have a genuine
+> finding dropped. The alternative — *demote instead of discard*, still sending it to the
+> model with a flag and a capped confidence — trades a few extra calls for recall. The
+> recall cost of the current policy is unmeasured.
+
+### Failure handling
+
+Every stage degrades rather than aborting the review: triage falls back to a default
+profile; a failing rule is marked as an execution error while the rest proceed; a failed
+evidence check passes the finding downstream; a failed cross-validation keeps the
+original finding but forces human review; a failed arbitration adopts the validator's
+verdict; a failed synthesis drops only the narrative summary. All degradations are
+recorded in the report's error list — nothing fails silently.
+
+> **Framework vs. instantiation.** The framework is the agent division of labour, the
+> evidence constraint and the review structure. The regulation corpus (36 texts), the
+> rule pack (69 rules) and the sample document are an *instantiation* — replaceable
+> content. A different jurisdiction or institution only requires new `knowledge/`
+> content, not changes to the agents or the review structure.
+>
 > **Scope of validation.** The framework's end-to-end behaviour has **not** been
 > measured with a real language model, and the sample procurement document in
 > `knowledge/samples/` is synthetic. What is verified: pipeline correctness with a
