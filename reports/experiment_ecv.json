@@ -87,8 +87,8 @@
     }
   },
   "cost": {
-    "total_ms": 323.2,
-    "per_item_ms": 2.309,
+    "total_ms": 326.31,
+    "per_item_ms": 2.331,
     "llm_review_ratio": 57.14,
     "saving_ratio": 42.86
   },

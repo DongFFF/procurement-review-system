@@ -151,8 +151,9 @@ recorded in the report's error list — nothing fails silently.
 > measured with a real language model, and the sample procurement document in
 > `knowledge/samples/` is synthetic. What is verified: pipeline correctness with a
 > scripted stand-in, retrieval quality, citation traceability, and the deterministic
-> checker's behaviour on a constructed test set. See
-> [docs/论文交付说明.md](docs/论文交付说明.md) for the verification matrix.
+> checker's behaviour on a constructed test set. Reproduce with
+> `scripts/experiment_multiagent.py`; the raw numbers are in
+> `reports/experiment_ecv.json`.
 
 ---
 
@@ -297,8 +298,7 @@ See [packaging guide](docs/打包说明.md) (Chinese).
 │   ├── README.zh-CN.md         简体中文 README
 │   ├── 使用手册.md              User manual
 │   ├── 打包说明.md              Packaging guide
-│   ├── 文献插入工作流.md        Programmatic Zotero citation-field workflow
-│   └── 论文交付说明.md          Paper delivery status & verification matrix
+│   └── 文献插入工作流.md        Programmatic Zotero citation-field workflow
 │
 ├── 启动.bat                    One-click launcher (portable build)
 │
@@ -312,7 +312,6 @@ See [packaging guide](docs/打包说明.md) (Chinese).
     ├── build_references.py     CNKI citation parsing → Zotero ingestion → bibliography
     ├── zotero_extract_reference.py  Extract field structure from a reference .docx
     ├── zotero_fields.py        Zotero field & document-prefs injection + self-check
-    ├── build_paper.py          Paper DOCX builder (--zotero for field version)
     ├── test_split_instructions.py  Regression: parse fields split across runs
     ├── push_via_api.py         Push via GitHub API when git/HTTPS is blocked
     ├── desktop.spec            PyInstaller spec

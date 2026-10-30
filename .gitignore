@@ -62,6 +62,21 @@ knowledge/.tmp/
 *.db-wal
 *.db-shm
 
+# ================= 稿件不入库（避免发表前公开） =================
+# 论文正文、参考文献表与生成脚本均放在仓库之外，此处仅为防护
+docs/论文_*.docx
+docs/论文*.md
+scripts/build_paper.py
+reports/bibliography_*.txt
+reports/citation_order.json
+reports/references_*.json
+reports/references.ris
+reports/zotero_items*.json
+reports/zotero_check/
+reports/zotero_profile.json
+*稿件*
+*manuscript*.docx
+
 # ================= 密钥与凭据 =================
 .env
 .env.*

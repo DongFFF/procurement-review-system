@@ -205,7 +205,7 @@ class ProjectProfile:
 
 @dataclass
 class AgentTrace:
-    """单个智能体的执行记录，用于可观测性与论文中的开销分析。"""
+    """单个智能体的执行记录，用于可观测性与各环节开销分析。"""
 
     agent: str
     stage: str
